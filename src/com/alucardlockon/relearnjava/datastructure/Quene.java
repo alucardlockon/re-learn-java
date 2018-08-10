@@ -1,13 +1,22 @@
 package com.alucardlockon.relearnjava.datastructure;
 
 import java.util.PriorityQueue;
+import java.util.concurrent.ArrayBlockingQueue;
 import java.util.concurrent.ConcurrentLinkedQueue;
+import java.util.concurrent.LinkedBlockingQueue;
 
+/**
+ * 队列
+ * ﻿非阻塞队列：ConcurrentLinkedQueue(无界线程安全)，采用CAS机制（compareAndSwapObject原子操作）。
+ * 阻塞队列：ArrayBlockingQueue(有界)、LinkedBlockingQueue（无界）、DelayQueue、PriorityBlockingQueue，采用锁机制；使用 ReentrantLock 锁。
+ */
 public class Quene {
     public static void main(String[] args) {
-        //runTest();
-        //runPriorityQueue();
+        runTest();
+        runPriorityQueue();
         runConcurrentLinkedQueue();
+        runArrayBlockingQueue();
+        runLinkedBlockingQueue();
     }
 
     private static void runTest() {
@@ -60,4 +69,34 @@ public class Quene {
         concurrentLinkedQueue.offer(4);
         System.out.println(concurrentLinkedQueue.poll());
     }
+
+    /**
+     * ArrayBlockingQueue在构造时需要指定容量， 并可以选择是否需要公平性，如果公平参数被设置true，
+     * 等待时间最长的线程会优先得到处理（其实就是通过将ReentrantLock设置为true来 达到这种公平性的：即等待时间最长的线程会先操作）。
+     * 通常，公平性会使你在性能上付出代价，只有在的确非常需要的时候再使用它。它是基于数组的阻塞循环队 列，
+     * 此队列按 FIFO（先进先出）原则对元素进行排序。
+     */
+    private static void runArrayBlockingQueue(){
+        ArrayBlockingQueue<Integer> arrayBlockingQueue=new ArrayBlockingQueue<>(10);
+        arrayBlockingQueue.add(3);
+        arrayBlockingQueue.add(1);
+        arrayBlockingQueue.add(2);
+        arrayBlockingQueue.add(4);
+        System.out.println(arrayBlockingQueue);
+    }
+
+    /**
+     * LinkedBlockingQueue的容量是没有上限的（说的不准确，在不指定时容量为Integer.MAX_VALUE，不要然的话在put时怎么会受阻呢），
+     * 但是也可以选择指定其最大容量，它是基于链表的队列，此队列按 FIFO（先进先出）排序元素。
+     */
+    private static void runLinkedBlockingQueue(){
+        LinkedBlockingQueue<String> linkedBlockingQueue = new LinkedBlockingQueue<>();
+        linkedBlockingQueue.offer("231");
+        linkedBlockingQueue.offer("431");
+        linkedBlockingQueue.offer("441");
+        linkedBlockingQueue.offer("322");
+        linkedBlockingQueue.offer("499");
+        System.out.println(linkedBlockingQueue);
+    }
+
 }
